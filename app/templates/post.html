@@ -1,0 +1,91 @@
+{% extends 'base.html'%} {% block content %}
+<header class="masthead" style="background-image: url('https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pexels.com%2Fsearch%2Fbackground%2F&psig=AOvVaw3TOJsWKSIs0V_G3CZGcBAm&ust=1652609597497000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCJC1m9Lg3vcCFQAAAAAdAAAAABAJ'); margin-top: 40px;">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="post-heading">
+                    <h1>{{post.post_title}}</h1>
+                    <span class="meta">Posted by
+                        <a href="{{url_for('main.profile', id = post.user_id)}}">{{post.post_by}}</a>
+                        on {{post.posted_at.strftime('%B %d, %Y')}}
+                    </span> {%if comment_count == 1%}
+                    <small>{{comment_count}} comment</small> {%else%}
+                    <small>{{comment_count}} comments</small> {%endif%}
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- posts -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="content">
+                    {{post.post_content | safe}}
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+<hr>
+<!-- Comments -->
+<div class="media-body">
+    <div class="article-metadata">
+        <a class="mr-2" href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ post.author.username }}</a>
+        <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small> {% if post.author == current_user %}
+        <div>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('posts.update_post', post_id=post.id) }}">Update</a>
+            <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+        </div>
+        {% endif %}
+    </div>
+    <h2 class="article-title">{{ post.title }}</h2>
+    <p class="article-content">{{ post.content }}</p>
+</div>
+</article>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Post?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <form action="{{ url_for('posts.delete_post', post_id=post.id) }}" method="POST">
+                    <input class="btn btn-danger" type="submit" value="Delete">
+                </form>
+            </div>
+            {%endif%}
+        </div>
+    </div>
+</div>
+</div>
+</div>
+{%endfor%}
+<br>
+<div class="make-comment">
+    <form class="form-group mt-2" method="POST">
+        {{comment_form.hidden_tag()}} {{comment_form.alias(class = "form-control", placeholder = "Enter a name")}}
+        <br> {{comment_form.comment(class = "form-control", placeholder = "Write a comment")}}
+
+        <div class="text-right" style="margin-top: 10px;">
+            {{comment_form.submit(class = "btn btn-outline-dark btn-sm")}}
+        </div>
+    </form>
+</div>
+</div>
+</div>
+</div>
+<div class="col-lg-2"></div>
+</div>
+
+</div>
+</section>
+{%endblock%}

@@ -1,0 +1,27 @@
+{% extends 'base.html'%} {% block content %}
+<div class="container" style="margin-top: 8%;">
+    <div class="row">
+        <!-- displaying  Username-->
+        <div class="col-md-4">
+            <h3> {{user.username| capitalize}} </h3>
+
+            <!--Displaying user bio-->
+            {% if user.bio %}
+            <p> {{user.bio}}</p>
+            {%else%}
+            <p> {{user.username| capitalize}} has no bio </p>
+            {% endif %}
+        </div>
+
+        <!--Display profile photo-->
+
+    </div>
+
+
+</div>
+<style>
+    body {
+        background-image: url(/static/images/background1.jpg);
+    }
+</style>
+{% endblock %}
