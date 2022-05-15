@@ -13,13 +13,31 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
-    password = db.Column(db.String(60), nullable=False)
+    password_hash = db.Column(db.String(255))
     posts = db.relationship('Post', backref='author', lazy=True)
 
-    
+    @property
+    def password(self):
+        raise AttributeError('You cannot read the password attribute')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+
+    def verify_password(self,password):
+        return check_password_hash(self.password_hash,password)
+
+    def save_u(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+        return f'User{self.username}'
 
 @login_manager.user_loader
 def user_loader(user_id):
@@ -82,35 +100,7 @@ class Comment(db.Model):
         return comments        
 
 
-    @property
-    def password(self):
-        raise AttributeError("You cannot read the password attribute")
-
-    @password.setter
-    def password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def verify_password(self, password):
-        return check_password_hash(self.password_hash, password)
-
-    # User like logic
-    def like_post(self, post):
-        if not self.has_liked_post(post):
-            like = PostLike(user_id = self.id, post_id = post.id)
-            db.session.add(like)
-
-    # User dislike logic
-    def unlike_post(self, post):
-        if self.has_liked_post(post):
-            PostLike.query.filter_by(
-                user_id = self.id,
-                post_id = post.id).delete()
-
-    # Check if user has liked post
-    def has_liked_post(self, post):
-        return PostLike.query.filter(
-            PostLike.user_id == self.id,
-            PostLike.post_id == post.id).count() > 0
+    
 
     # string representaion to print out a row of a column, important in debugging
     def __repr__(self):
