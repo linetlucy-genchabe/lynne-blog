@@ -1,20 +1,16 @@
-{%extends "base.html"%} {%block content%}
-<br><br><br>
-<div class="container">
+{% extends 'base.html'%} {% import 'bootstrap/wtf.html' as wtf %} {% block content %}
+
+<body>
+
     <div class="container">
-        <div class="row">
+        <div class="row col-md-12" style="margin-top: 15%;padding-top: 5%;padding-bottom: 5%;width: 50%;border-radius: 20px;margin-left: 25%;background-color: chocolate;">
             <div class="col-md-2"></div>
-            <div class="col-md-8">
-                <h3>Update blog post</h3>
-                <form method="post">
-                    {{edit_form.hidden_tag()}} {{edit_form.title.label}} {{edit_form.title(class = "form-control", value = post.post_title)}}
-                    <br> {{edit_form.post.label}} {{edit_form.post(id = "summernote", value = post.post_content)}}
-                    <br> {{edit_form.submit(class = "btn btn-primary")}}
-                </form>
-            </div>
+            <div class="col-md-8">{{wtf.quick_form(edit_form)}}</div>
             <div class="col-md-2"></div>
         </div>
     </div>
-</div>
 
-{%endblock%}
+</body>
+
+
+{% endblock%}

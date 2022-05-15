@@ -1,0 +1,43 @@
+{% extends 'base.html' %} {% macro display_blogs(posts) %}
+<div class="container-fluid">
+    <div>
+        <br><br>
+    </div>
+    <div class="jumbotron">
+        <div class="overlay" style="margin-top: -5%;">
+            <h1 class="">BLOGS</h1>
+            <a href="/post/new"><button class="btn">New Blog</button></a>
+        </div>
+    </div>
+    <div class="card-columns">
+        {% if posts %} {% for post in posts %}
+        <div class="card" style="margin-bottom: 1%;">
+            <div class="card-body">
+                <p>{{posts}}</p>
+
+            </div>
+            <div class="card-footer foot_flex d-block mx-auto">
+                <a href="/post/{{post_id}}"><button class="btn btn-info">Comment</button></a>
+
+            </div>
+        </div>
+        {% endfor %} {% endif %}
+    </div>
+</div>
+{% endmacro %}{% macro display_comments(comments) %}
+<div class="container">
+</div>
+<div class="card-columns">
+    {% for comment in comments %}
+    <div class="card">
+        <div class="card-header">
+        </div>
+        <div class="card-body">
+            <p>{{comment.comment}}</p>
+        </div>
+        <p class="text-center">{{comment.post_title}}</p>
+    </div>
+    {% endfor %}
+</div>
+
+{% endmacro %}
