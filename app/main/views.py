@@ -11,9 +11,10 @@ from .. import db
 from ..requests import get_quote
 from ..email import welcome_message, notification_message
 
-@main.route("/index", methods = ["GET", "POST"])
+@main.route("/", methods = ["GET", "POST"])
 def index():
-    posts = Post.get_all_posts()
+    
+    posts = Post.query.order_by(Post.date_posted.desc()).all()
     quote = get_quote()
 
     if request.method == "POST":
@@ -38,10 +39,7 @@ def post(id):
         comment_form.alias.data = ""
         if current_user.is_authenticated:
             comment_alias = current_user.username
-        new_comment = Comment(comment = comment, 
-                            comment_at = datetime.now(),
-                            comment_by = comment_alias,
-                            post_id = id)
+        new_comment = Comment(comment = comment, comment_at = datetime.now(),comment_by = comment_alias,post_id = id)
         new_comment.save_comment()
         return redirect(url_for("main.post", id = post.id))
 
@@ -85,27 +83,19 @@ def edit_post(id):
 @main.route("/post/new", methods = ["POST", "GET"])
 @login_required
 def new_post():
+
     post_form = PostForm()
     if post_form.validate_on_submit():
         post_title = post_form.title.data
         post_form.title.data = ""
-        post_content = bleach.clean(post_form.post.data, 
-                                    tags = bleach.sanitizer.ALLOWED_TAGS + ["h1", "h2", "h3", "h4",
-                                                                            "h5", "h6", "p", "span",
-                                                                            "div", "br", "em", "strong"
-                                                                            "i", "blockquote", "hr", "a"
-                                                                            "ul", "ol", "li"])
-        post_form.post.data = ""
-        new_post = Post(post_title = post_title,
-                        post_content = post_content,
-                        posted_at = datetime.now(),
-                        post_by = current_user.username,
-                        user_id = current_user.id)
+        post_content = post_form.content.data
+        post_form.content.data = ""
+        user_id = current_user._get_current_object().id
+        new_post = Post(title = post_title, content = post_content,user_id=current_user._get_current_object().id)
         new_post.save_post()
         subs = Subscribers.query.all()
         for sub in subs:
-            notification_message(post_title, 
-                            "email/subscribers", sub.email, new_post = new_post)
+            notification_message(post_title, "email/subscribers", sub.email, new_post = new_post)
             pass
         return redirect(url_for("main.post", id = new_post.id))
     
