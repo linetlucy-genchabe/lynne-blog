@@ -4,6 +4,7 @@ from . import auth
 from ..models import User
 from .forms import SignUpForm, LoginForm
 from .. import db
+from ..email import welcome_message
 
 
 @auth.route('/login',methods=['GET','POST'])
@@ -26,6 +27,9 @@ def register():
         user = User(username =  signup_form.username.data, email =  signup_form.email.data, password =  signup_form.password.data)
         db.session.add(user)
         db.session.commit()
+
+        welcome_message("Thank you for subscribing to lynne blog", "email/welcome", user.email,user=user)
+   
 
         return redirect(url_for("auth.login"))
     title = "Sign Up to lynne blog"

@@ -1,4 +1,4 @@
-Hello {{user.username}}
+Hello 
 
 Thank you for subscribing to my Blog, you'll receive a notification every time i make a new post.
 

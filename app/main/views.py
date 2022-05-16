@@ -1,5 +1,4 @@
-from flask import (render_template, request, redirect, 
-                   url_for, abort)
+from flask import render_template, request, redirect, url_for, abort,flash
 from . import main
 from ..models import User, Comment, Post, Subscribers
 from flask_login import login_required, current_user
@@ -21,8 +20,7 @@ def index():
         new_sub = Subscribers(email = request.form.get("subscriber"))
         db.session.add(new_sub)
         db.session.commit()
-        welcome_message("Thank you for subscribing to lynne blog", 
-                        "email/welcome", new_sub.email)
+        welcome_message("Thank you for subscribing to lynne blog", "email/welcome", new_sub.email)
     return render_template("index.html",posts = posts, quote = quote)
 
 @main.route("/post/<int:id>", methods = ["POST", "GET"])
@@ -110,8 +108,7 @@ def profile(id):
         new_sub = Subscribers(email = request.form.get("subscriber"))
         db.session.add(new_sub)
         db.session.commit()
-        welcome_message("Thank you for subscribing to lynne blog", 
-                        "email/welcome", new_sub.email)
+        welcome_message("Thank you for subscribing to lynne blog","email/welcome", new_sub.email)
 
     return render_template("profile/profile.html",user = user,posts = posts)
 
@@ -140,3 +137,12 @@ def update_profile(id):
         return redirect(url_for("main.profile", id = id))
     
     return render_template("profile/update.html",user = user,form = form)
+
+@main.route('/subscribe',methods = ['POST','GET'])
+def subscribe():
+    email = request.form.get('subscriber')
+    new_sub = Subscribers(email = email)
+    new_sub.save_subscriber()
+    notification_message("Subscribed to Lynne'sBlog","email/welcome",new_sub.email,new_sub=new_sub)
+    flash('Sucessfuly subscribed')
+    return redirect(url_for('main.index'))
