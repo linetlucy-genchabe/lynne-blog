@@ -17,8 +17,8 @@ class Config:
     
 
 class ProdConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'postgres://egytnmiusukpcj:2a057ec507e78cac94ae8f70b5600db2ff59727a1354da0b437445bfb08db32f@ec2-3-229-11-55.compute-1.amazonaws.com:5432/d59g9e816k8rj2'
-    pass
+    SQLALCHEMY_DATABASE_URI = 'postgresql://egytnmiusukpcj:2a057ec507e78cac94ae8f70b5600db2ff59727a1354da0b437445bfb08db32f@ec2-3-229-11-55.compute-1.amazonaws.com:5432/d59g9e816k8rj2'
+    
     
 
 
