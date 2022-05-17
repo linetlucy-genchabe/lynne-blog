@@ -4,6 +4,9 @@
 ## Description
 This is a personal blogging website where i can create and share my opinions and other users can read and comment on them.
 
+# UI
+<img src="./app/static/images/lynneblogs.png">
+
 ## User Stories
 
 * user can view the blog posts on the site
@@ -15,6 +18,17 @@ This is a personal blogging website where i can create and share my opinions and
 * writer can create a blog from the application.
 * writer can delete comments that I find insulting or degrading.
 * writer can update or delete blogs I have created.
+
+# BDD 
+| Behaviour | Input | Output |
+| :---------------- | :---------------: | ------------------: |
+| Load the page | **On page load** | view quotes and all blogs, Select  signup or login|
+| Select SignUp| **Email**,**Username**,**Password** | Redirect to login|
+| Select Login | **Username** and **password** | Redirect to page with blogs that have been posted by writes and be able to subscribe to the blog|
+| Select comment button | **Comment** | Form that you input your comment|
+| Click on submit |  | Redirect to all comments tamplate with your comment and other comments|
+|Subscription | **Email Address**| email message "Succesfully subsbribed to lynne Blog"|
+
 
 
 ## Setup/Installation Requirements
